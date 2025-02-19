@@ -1,4 +1,4 @@
-# Hardhat Ignition DAO Project
+# DAO Project
 
 A decentralized autonomous organization (DAO) implementation using Hardhat Ignition for streamlined deployment and testing.
 

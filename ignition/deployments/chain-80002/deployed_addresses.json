@@ -1,0 +1,6 @@
+{
+  "DAODeployment#Box": "0x4e26D96832D714bB1Dfb43e3143cDDC994C02495",
+  "DAODeployment#GovernanceToken": "0x59C0a29840cD7a2c9Acf4DC0a3EA4e92DC460803",
+  "DAODeployment#TimeLock": "0x946bEc1B29a1cE1C033af43b3c538506660BD822",
+  "DAODeployment#GovernorContract": "0x30333A70F7F110874b50c149e09f8721A7F22637"
+}

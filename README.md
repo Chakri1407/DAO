@@ -1,124 +1,190 @@
-# DAO Project
+# Decentralized Autonomous Organization (DAO) Implementation
 
-A decentralized autonomous organization (DAO) implementation using Hardhat Ignition for streamlined deployment and testing.
+## Project Overview
 
-## Overview
+This project demonstrates a DAO governance system where token holders can propose, vote, and execute changes to a smart contract. The system includes:
 
-This project implements a DAO smart contract system using Hardhat and Hardhat Ignition for simplified deployment management. The DAO allows members to create proposals, vote on them, and execute approved decisions on-chain.
+* **GovernanceToken**: ERC-20 token used for voting power
+* **TimeLock**: A time-lock mechanism to delay proposal execution
+* **GovernorContract**: Handles proposal creation, voting, and execution
+* **Box**: A sample contract to demonstrate governance functionality
 
-## Prerequisites
+## Features
 
-- Node.js (v14.0.0 or later)
-- npm or yarn
-- Git
+* **Token-Based Voting**: Voting power is proportional to GovernanceToken holdings
+* **Time-Lock Mechanism**: Ensures proposals are executed after a delay
+* **Proposal Lifecycle**: Supports proposal creation, voting, queuing, and execution
+* **Hardhat Integration**: Includes tests and scripts for deployment and verification
 
-## Installation
+## Technologies Used
 
-1. Clone the repository:
-```bash
-git clone <your-repository-url>
-cd <project-directory>
+* **Solidity**: Smart contract development
+* **Hardhat**: Development environment for Ethereum-based projects
+* **Polygon Amoy Testnet**: Deployment and testing network
+* **Alchemy**: Node provider for interacting with the blockchain
+* **Etherscan (Polygonscan)**: Contract verification and exploration
+
+## Contract Addresses (Polygon Amoy Testnet)
+
+| Contract | Address |
+|----------|---------|
+| Box | `0x4e26D96832D714bB1Dfb43e3143cDDC994C02495` |
+| Governance Token | `0x59C0a29840cD7a2c9Acf4DC0a3EA4e92DC460803` |
+| TimeLock | `0x946bEc1B29a1cE1C033af43b3c538506660BD822` |
+| Governor Contract | `0x30333A70F7F110874b50c149e09f8721A7F22637` |
+
+## Setup Instructions
+
+### Prerequisites
+
+1. Install [Node.js](https://nodejs.org/) (v18 or higher)
+2. Install [Hardhat](https://hardhat.org/):
+   ```bash
+   npm install --save-dev hardhat
+   ```
+3. Install dependencies:
+   ```bash
+   npm install @nomicfoundation/hardhat-toolbox @nomicfoundation/hardhat-verify dotenv
+   ```
+
+### Configuration
+
+1. Create a `.env` file in the root directory:
+   ```plaintext
+   PRIVATE_KEY=your_private_key_here
+   RPC_URL=https://polygon-amoy.g.alchemy.com/v2/pStnSzocaCdsw0JLuO5Io-5c6xxakD_2
+   Amoy_API_KEY=your_polygonscan_api_key_here
+   ```
+
+2. Network Configuration (`hardhat.config.js`):
+   ```javascript
+   module.exports = {
+     solidity: "0.8.20",
+     networks: {
+       amoy: {
+         url: process.env.RPC_URL,
+         accounts: [process.env.PRIVATE_KEY],
+         chainId: 80002
+       },
+     },
+     etherscan: {
+       apiKey: {
+         amoy: process.env.Amoy_API_KEY
+       }
+     },
+   };
+   ```
+
+## Deployment Process
+
+### 1. Governance Token
+
+* ERC20 token that governs the DAO
+* Initial supply: 1,000,000 tokens
+* Automatically minted to deployer's wallet
+
+### 2. TimeLock
+
+Configuration parameters:
+* Minimum delay: 3600 seconds (1 hour)
+* Initial proposers: Empty array
+* Initial executors: Empty array
+* Admin: Deployer address
+
+### 3. Governor Contract
+
+Configuration parameters:
+* Token: Governance Token address
+* TimeLock: TimeLock contract address
+* Quorum: 4%
+* Voting Period: 50400 blocks (~1 week)
+* Voting Delay: 1 block
+
+### 4. Box Contract
+
+* Example contract controlled by the DAO
+* Ownership transferred to TimeLock contract after deployment
+
+## Proposal Workflow
+
+### Creating a Proposal
+
+```solidity
+// Example proposal parameters
+targets: [Box_contract_address]
+values: [0]
+calldatas: ["0x6057361d000000000000000000000000000000000000000000000000000000000000004d"]
 ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+### Voting Process
 
-## Project Structure
+1. **Delegate Voting Power**
+   * Users must delegate their voting power before voting
+   * Can delegate to self or others
+   * Must hold tokens before proposal creation
 
-```
-├── contracts/              # Smart contract source files
-├── deploy/                 # Ignition deployment scripts
-├── test/                   # Test files
-├── ignition/              # Ignition modules
-├── scripts/               # Helper scripts
-└── hardhat.config.js      # Hardhat configuration
-```
+2. **Casting Votes**
+   * Options: For (1), Against (0), Abstain (2)
+   * Use `castVote` function with proposal ID
 
-## Key Features
+3. **Proposal States**
+   * Check status using `state(proposalId)`
+   * Monitor votes using `getVotes`
 
-- Proposal creation and management
-- Voting mechanism
-- Token-based governance
-- Automated execution of approved proposals
-- Hardhat Ignition deployment system
+### Execution Process
 
-## Development
+1. **Queue Proposal** (after successful vote)
+   ```solidity
+   queue(
+       [Box_contract_address],
+       [0],
+       ["0x6057361d000000000000000000000000000000000000000000000000000000000000004d"],
+       keccak256(bytes("Store 77 in Box"))
+   )
+   ```
 
-### Compile Contracts
+2. **Wait for TimeLock Delay**
 
-```bash
-npx hardhat compile
-```
+3. **Execute Proposal**
+   ```solidity
+   execute(
+       [Box_contract_address],
+       [0],
+       ["0x6057361d000000000000000000000000000000000000000000000000000000000000004d"],
+       keccak256(bytes("Store 77 in Box"))
+   )
+   ```
 
-### Run Tests
+## Testing
 
+The project includes a comprehensive test suite covering:
+
+* Contract deployment
+* Proposal creation
+* Voting mechanics
+* Proposal execution
+* TimeLock functionality
+
+Run tests using:
 ```bash
 npx hardhat test
 ```
 
-### Deploy Using Ignition
+## Frontend Integration
 
-1. Configure your deployment in `ignition/modules/`:
-```bash
-npx hardhat ignition:deploy modules/dao.js --network <network-name>
-```
+The DAO interfaces with Tally for a user-friendly governance interface. Integration details are available in the frontend documentation.
 
-2. Verify deployment:
-```bash
-npx hardhat ignition:verify
-```
+## Security Considerations
 
-## Configuration
-
-1. Create a `.env` file in the root directory:
-```
-PRIVATE_KEY=your_private_key
-INFURA_API_KEY=your_infura_api_key
-ETHERSCAN_API_KEY=your_etherscan_api_key
-```
-
-2. Update `hardhat.config.js` with your network configurations.
-
-## Networks
-
-- Local: `npx hardhat node`
-- Testnet: Supported networks include Goerli, Sepolia
-- Mainnet: Ethereum mainnet
-
-## Testing
-
-The project includes comprehensive tests for all core functionalities:
-
-- Unit tests for individual contract functions
-- Integration tests for complex workflows
-- Gas optimization tests
-
-Run specific test files:
-```bash
-npx hardhat test test/DAO.test.js
-```
-
-## Security
-
-- All smart contracts are following best practices
-- Consider getting an audit before mainnet deployment
-- Implement timelock mechanisms for critical functions
-- Use multi-sig for administrative functions
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+* Ensure proper role configuration in TimeLock
+* Verify token holdings before proposal creation
+* Consider timelock delays for security
+* Test all proposals thoroughly before mainnet deployment
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE.md file for details.
+MIT
 
-## Support
+## Contributing
 
-For support and questions, please open an issue in the repository.
+Contributions are welcome! Please submit pull requests with improvements or bug fixes.

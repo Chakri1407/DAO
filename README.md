@@ -8,6 +8,7 @@ This project demonstrates a DAO governance system where token holders can propos
 * **TimeLock**: A time-lock mechanism to delay proposal execution
 * **GovernorContract**: Handles proposal creation, voting, and execution
 * **Box**: A sample contract to demonstrate governance functionality
+* **Tally Integration**: User-friendly frontend interface for DAO governance
 
 ## Features
 
@@ -15,6 +16,7 @@ This project demonstrates a DAO governance system where token holders can propos
 * **Time-Lock Mechanism**: Ensures proposals are executed after a delay
 * **Proposal Lifecycle**: Supports proposal creation, voting, queuing, and execution
 * **Hardhat Integration**: Includes tests and scripts for deployment and verification
+* **Tally Dashboard**: Complete frontend interface for DAO management
 
 ## Technologies Used
 
@@ -23,6 +25,7 @@ This project demonstrates a DAO governance system where token holders can propos
 * **Polygon Amoy Testnet**: Deployment and testing network
 * **Alchemy**: Node provider for interacting with the blockchain
 * **Etherscan (Polygonscan)**: Contract verification and exploration
+* **Tally**: Frontend interface for DAO governance
 
 ## Contract Addresses (Polygon Amoy Testnet)
 
@@ -170,9 +173,22 @@ Run tests using:
 npx hardhat test
 ```
 
-## Frontend Integration
+## Frontend Integration with Tally
 
-The DAO interfaces with Tally for a user-friendly governance interface. Integration details are available in the frontend documentation.
+The DAO is integrated with Tally, providing a user-friendly interface for governance actions.
+
+### Using Tally Interface
+
+1. **Access Dashboard**
+   * Visit [Tally](https://www.tally.xyz)
+   * Connect your wallet
+   * Search for the DAO using the Governor Contract address
+
+2. **Key Features**
+   * Create and vote on proposals through an intuitive interface
+   * Track proposal status and voting results in real-time
+   * Manage token delegation
+   * View governance analytics and participation metrics
 
 ## Security Considerations
 

@@ -86,41 +86,4 @@ describe("GovernanceToken", function () {
     });
   });
 
-//   describe("Token Burning", function () {
-//     it("Should allow burning of tokens", async function () {
-//       const { governanceToken, owner } = await loadFixture(deployGovernanceTokenFixture);
-//       const burnAmount = ethers.parseEther("1000");
-//       const initialSupply = await governanceToken.totalSupply();
-      
-//       await governanceToken._burn(burnAmount);
-      
-//       expect(await governanceToken.totalSupply()).to.equal(initialSupply - burnAmount);
-//       expect(await governanceToken.balanceOf(owner.address)).to.equal(initialSupply - burnAmount);
-//     });
-
-//     it("Should fail if trying to burn more than balance", async function () {
-//       const { governanceToken, addr1 } = await loadFixture(deployGovernanceTokenFixture);
-//       const burnAmount = ethers.parseEther("1");
-      
-//       await expect(
-//         governanceToken.connect(addr1).burn(burnAmount)
-//       ).to.be.revertedWith("ERC20: burn amount exceeds balance");
-//     });
-
-//     it("Should update voting power after burning", async function () {
-//       const { governanceToken, owner } = await loadFixture(deployGovernanceTokenFixture);
-//       const burnAmount = ethers.parseEther("1000");
-
-//       // First delegate to self
-//       await governanceToken.delegate(owner.address);
-//       const initialVotingPower = await governanceToken.getVotes(owner.address);
-
-//       // Burn tokens
-//       await governanceToken.burn(burnAmount);
-
-//       // Check voting power after burning
-//       const finalVotingPower = await governanceToken.getVotes(owner.address);
-//       expect(finalVotingPower).to.equal(initialVotingPower - burnAmount);
-//     });
-//   });
 });
